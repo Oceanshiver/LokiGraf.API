@@ -69,6 +69,15 @@ namespace LokiGraf.Console
         public void Talk(string text)
         {
             _logger.LogInformation("Person {name} spoke {text}", Name, text);
+
+            try
+            {
+                throw new ArgumentException("test exception");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "{ArgumentException}", "ArgumentExceptionTest");
+            }
         }
     }
 }
