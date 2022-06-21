@@ -65,7 +65,7 @@ namespace LokiGraf.Console
 
         public void Log()
         {
-            Parameter = "foobar";
+            Parameter = "hello world";
             _logger.LogInformation("{@parameter}", Parameter);
         }
     }
