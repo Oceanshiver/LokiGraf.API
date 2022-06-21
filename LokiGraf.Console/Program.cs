@@ -23,9 +23,8 @@ namespace LokiGraf.Console
 
                 using (servicesProvider as IDisposable)
                 {
-                    var person = servicesProvider.GetRequiredService<Person>();
-                    person.Name = "Sky";
-                    person.Talk("Hello");
+                    var person = servicesProvider.GetRequiredService<LoggerTest>();
+                    person.Log();
                 }
             }
             catch (Exception ex)
@@ -42,11 +41,9 @@ namespace LokiGraf.Console
         private static IServiceProvider BuildDi(IConfiguration config)
         {
             return new ServiceCollection()
-                  //Add DI Classes here
-                  .AddTransient<Person>()
+                  .AddTransient<LoggerTest>()
                   .AddLogging(loggingBuilder =>
                   {
-                      // configure Logging with NLog
                       loggingBuilder.ClearProviders();
                       loggingBuilder.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
                       loggingBuilder.AddNLog(config);
@@ -55,20 +52,21 @@ namespace LokiGraf.Console
         }
     }
 
-    public class Person
+    internal class LoggerTest
     {
-        private readonly ILogger<Person> _logger;
+        private readonly ILogger<LoggerTest> _logger;
 
-        public string Name { get; set; }
-
-        public Person(ILogger<Person> logger)
+        public LoggerTest(ILogger<LoggerTest> logger)
         {
             _logger = logger;
         }
 
-        public void Talk(string text)
+        public string Parameter { get; set; }
+
+        public void Log()
         {
-            _logger.LogInformation("Person {name} spoke {text}", Name, text);
+            Parameter = "foobar";
+            _logger.LogInformation("{@parameter}", Parameter);
         }
     }
 }
